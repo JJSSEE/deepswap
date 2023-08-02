@@ -7,8 +7,16 @@ const app = express();
 const port = 8888;
 
 // Set up multer for file uploads
+const storage = multer.diskStorage({
+    destination: 'uploads/',
+    filename: function (req, file, cb) {
+        const extension = file.mimetype.split('/')[1];
+        cb(null, file.fieldname + Date.now() + '.' + extension);
+    }
+});
+
 const upload = multer({
-    dest: 'uploads/',
+    storage: storage,
     limits: {
         fileSize: 10 * 1024 * 1024, // 10MB limit for files
     }
@@ -29,7 +37,7 @@ app.post('/upload', upload.fields([{ name: 'image', maxCount: 1 }, { name: 'vide
 
     const target = `--target ${videoFile.path}`;
     const source = `--source ${imageFile.path}`;
-    const output = '--o /workspace/deepswap/output/';
+    const output = `--output ${videoFile.path}.mp4`;
     const executionProvider = '--execution-provider cuda';
     const frameProcessor = '--frame-processor face_swapper face_enhancer';
 
@@ -48,7 +56,7 @@ app.post('/upload', upload.fields([{ name: 'image', maxCount: 1 }, { name: 'vide
         console.log(`Python process exited with code ${code}`);
         if (code === 0) {
             // Send the rendered output video back to the client
-            res.send(`<video controls><source src="path_to_output_video.mp4" type="video/mp4"></video>`);
+            res.send(`<video controls><source src="${videoFile.path}.mp4" type="video/mp4"></video>`);
         } else {
             res.status(500).send('An error occurred during Python execution.');
         }
