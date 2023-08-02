@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload Image and Video</title>
+</head>
+<body>
+    <h1>Upload Image and Video</h1>
+    <form action="/upload" method="post" enctype="multipart/form-data">
+        <label for="image">Select an image:</label>
+        <input type="file" id="image" name="image" accept="image/*"><br>
+        <label for="video">Select a video:</label>
+        <input type="file" id="video" name="video" accept="video/*"><br>
+        <input type="submit" value="Upload">
+    </form>
+    <div id="output">
+        <!-- Output video will be rendered here -->
+    </div>
+    <script>
+        // Your JavaScript code (if needed) can be added here
+    </script>
+</body>
+</html>
