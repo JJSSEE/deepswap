@@ -35,8 +35,8 @@ app.post('/upload', upload.fields([{ name: 'image', maxCount: 1 }, { name: 'vide
     // Replace 'run.py' with the actual path to your Python script
     const pythonScript = 'run.py';
 
-    const target = `--target ${videoFile.path}`;
-    const source = `--source ${imageFile.path}`;
+    const target = `--target ${videoFile.path}.mp4`;
+    const source = `--source ${imageFile.path}.jpg`;
     const output = `--output ${videoFile.path}.mp4`;
     const executionProvider = '--execution-provider cuda';
     const frameProcessor = '--frame-processor face_swapper face_enhancer';
