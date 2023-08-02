@@ -35,14 +35,17 @@ app.post('/upload', upload.fields([{ name: 'image', maxCount: 1 }, { name: 'vide
     // Replace 'run.py' with the actual path to your Python script
     const pythonScript = 'run.py';
 
-    const target = `--target ${videoFile.path}.mp4`;
-    const source = `--source ${imageFile.path}.jpg`;
-    const output = `--output ${videoFile.path}.mp4`;
-    const executionProvider = '--execution-provider cuda';
-    const frameProcessor = '--frame-processor face_swapper face_enhancer';
+    const target = `${videoFile.path}`;
+    const source = `${imageFile.path}`;
+    const output = `${videoFile.path}_output.mp4`;
+    const executionProvider = '--execution-provider';
+    const cuda = 'cuda';
+    const frameProcessor = '--frame-processor';
+    const faceSwapper = 'face_swapper';
+    const faceEnhancer = 'face_enhancer';
 
     // Spawn a child process to run the Python script
-    const pythonProcess = spawn('python', [pythonScript, target, source, output, executionProvider, frameProcessor]);
+    const pythonProcess = spawn('python', [pythonScript, '--target', target, '--source', source, '--output', output, executionProvider, cuda, frameProcessor, faceSwapper, faceEnhancer]);
 
     pythonProcess.stdout.on('data', (data) => {
         console.log(`Python stdout: ${data}`);
@@ -56,7 +59,7 @@ app.post('/upload', upload.fields([{ name: 'image', maxCount: 1 }, { name: 'vide
         console.log(`Python process exited with code ${code}`);
         if (code === 0) {
             // Send the rendered output video back to the client
-            res.send(`<video controls><source src="${videoFile.path}.mp4" type="video/mp4"></video>`);
+            res.send(`<video controls><source src="${output}" type="video/mp4"></video>`);
         } else {
             res.status(500).send('An error occurred during Python execution.');
         }
