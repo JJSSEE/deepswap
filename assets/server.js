@@ -29,7 +29,7 @@ app.post('/upload', upload.fields([{ name: 'image', maxCount: 1 }, { name: 'vide
 
     const target = `--target ${videoFile.path}`;
     const source = `--source ${imageFile.path}`;
-    const output = '--o outputvideopath';
+    const output = '--o /workspace/deepswap/output/';
     const executionProvider = '--execution-provider cuda';
     const frameProcessor = '--frame-processor face_swapper face_enhancer';
 
